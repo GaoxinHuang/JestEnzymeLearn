@@ -4,7 +4,7 @@ npm install -g create-react-app: 安装到pc中
 
 二.	实际操作
 create-react-app projectName: 生成react代码
-
+------------------------------------------------------------------
 
 L5 - L6 create a react app from Scratch (未看完)
 一.	概念
@@ -12,7 +12,7 @@ L5 - L6 create a react app from Scratch (未看完)
 
 二.	实际操作
 npm install --save-dev jest babel-jest
-
+--------------------------------------------------------
 
 L7	Demo of Jest Watch Mode
 一.	原理
@@ -20,3 +20,20 @@ L7	Demo of Jest Watch Mode
 
 二.	指令
 run test的指令:	npm test (README.md 里也有)
+注: 开启的是 watch 模式
+-----------------------------------------------------------------------
+
+L8	More about Jest Watch Mode, Test Files and Tests
+一.	Jest 的watch mode的特性
+1.	第二次开启 watch mode, 如果发现 和上次git commit没有任何修改在 与测试的有关的文件(包括测试和被测试). 
+	就会不再跑一遍测试. (就会有一些提示, 比如按 a 就会跑一次所有的tests)
+	
+原理: Jest会查看所有文件以 .test.js 结尾的文件名. 
+
+二.	测试代码
+1.	create-react-app 默认 it(xxx,()=>{}) 
+	改成 test(xxx, ()=>{...})
+注:	因为这样更容易理解, 而且jest官方文件也是这样
+
+2.	
+	
