@@ -1,0 +1,22 @@
+L4	create-react-app
+一.	准备动作
+npm install -g create-react-app: 安装到pc中
+
+二.	实际操作
+create-react-app projectName: 生成react代码
+
+
+L5 - L6 create a react app from Scratch (未看完)
+一.	概念
+1.	参考链接: https://blog.usejournal.com/creating-a-react-app-from-scratch-f3c693b84658
+
+二.	实际操作
+npm install --save-dev jest babel-jest
+
+
+L7	Demo of Jest Watch Mode
+一.	原理
+1.	如果用 create-react-app 建立 react 会自动安装 jest. (在yarn.lock可以看到)
+
+二.	指令
+run test的指令:	npm test (README.md 里也有)
