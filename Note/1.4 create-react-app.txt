@@ -35,5 +35,51 @@ L8	More about Jest Watch Mode, Test Files and Tests
 	改成 test(xxx, ()=>{...})
 注:	因为这样更容易理解, 而且jest官方文件也是这样
 
-2.	
+L9	处理错误
+一.	错误信息如下:
+npm WARN jest-enzyme@7.0.1 requires a peer of jest@>=22.0.0 but none is installed. You must install peer dependencies yourself.
+npm WARN jest-environment-enzyme@7.0.1 requires a peer of jest@>=22.0.0 but none is installed. You must install peer dependencies yourself.
+ 
+二.	原因(自学):	应该是版本不匹配
+
+三.	解决方案:
+方案一.	重新安装 react
+方案二.	删除 dependencies
+	(1).	删除 package-lock.json	或 yarn.lock
+	(2).	删除 node_modules
+	(3).	remove jest from package.json
 	
+	
+L10	Enzyme Set up
+一.	Enzyme的作用:
+1.	Enzyme 主要作用(下面也是重点)
+(1)	Creates virtual DOM for testing (这里我们就不需要 react-dom)
+(2)	Allows testing without a browser. (在browser, 我们可以看到 render)
+	
+2.	Shallow Rendering 
+(1).	Render components only one level deep
+	a.	Render parent but use placeholders for children components
+	
+3.	Access to props and stats
+	(1)	Manipulate values
+	(2) Examine / test for values
+	
+4.	Enzyme vs react-dom
+(1).	Enzyme has better toolkit
+	a.	Search through DOM  
+	b.	Simulate simple events
+
+二.	实际操作
+1.	安装包 enzyme, jest-enzyme, enzyme-adapter-react-16 (对应的react版本) :
+npm install --save-dev enzyme jest-enzyme enzyme-adapter-react-16
+注:	因为用 create-react-app 已经安装过 jest. 所以这里没有再安装Jest
+
+2.	测试代码操作:
+import React from 'react';
+import App from './App';
+import Enzyme from 'enzyme';
+import EnzymeAdapter from 'enzyme-adapter-react-16'
+
+Enzyme.configure({ adapter: new EnzymeAdapter() });
+test('renders without crashing', () => {});
+注:	这里移除了 ReactDom
