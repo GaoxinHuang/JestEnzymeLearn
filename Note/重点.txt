@@ -1,14 +1,18 @@
 一.	ajv 是什么, 什么作用
-1.	作用:	避免 peer dependency warning 甚至导致 npm bug 
+1.	作用:	避免 因为peer dependency而出现 npm bug
 warning信息如下 --- UNMET PEER DEPENDENCY webpack@3.0.0
 
 2.	概念:	
 (1)	ajv 是 "Another JSON Validator" and it is used for validating JSON.
 	它已经属于 create-react-app 的一部分
 	
-(2)	peer dependency 是 同一个项目安装了同一种依赖(可能不同的版本)
-	比如 项目依赖a 和 b. a和b又同时都依赖c. 
-	这时有可能为了a 安装c1, 为了b又安装c2. 虽然可能版本不一样.这就叫  peer dependency 
+(2)	peer dependency 是 同一个项目需要安装不同版本的同一种依赖
+	比如 项目依赖a 和 b. a和b又同时都依赖c的不同版本.
+	a需要版本c1, 而b需要版本c2.但是c2又不支持a. 所以c两个版本不能同时兼容a和b	
+	这里就出现了peer dependency, 比如
+	"peerDependencies": {
+		"webpack": "^2.0.0"
+	}
 	
-	ajx的目的就是最好帮助我们只安装一个合适的版本
+	ajx的目的就是 避免 因为peer dependency出现 npm bug
 
