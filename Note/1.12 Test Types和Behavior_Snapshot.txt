@@ -1,0 +1,44 @@
+L12	Types of Tests
+一.	概念
+1.	Unit Test - Tests one piece (usually one function)
+2.	Integration Tests - How multiple units work together 
+3.	Acceptance / End-to-End (E2E) tests - How a user would interact with the app (selenium test)
+
+L13	Test Behavior, not implementation
+一.	概念
+1.	Refactors should not affect tests
+2.	Feature to Test 
+	(1)	App keeps counter of button click count 
+	(2)	Click count is stored in component state
+
+3.	Good Test
+	(1)	Set initial state
+	(2)	Simulate clicking a button that increments counter
+	(3)	Check to see if counter state was incremented
+	
+4.	Brittle test (bad test)
+	(1)	Set initial state
+	(2)	Simulate clicking a button that increments counter
+	(3)	Check to see if particular function was called
+	
+5.	Why	Brittle
+	(1)	Testing implementation (function name changed?)
+	(2)	Not behvior (state update)
+	
+6.	Could extend this further
+	(1)	Isn't state an implementation?
+	(2)	Actual spec calls for counter display
+	(3)	Sometimes skip unit test/work, focus on integration 
+
+	
+L14	Snapshot testing
+一.	功能 snapshot (Jest feature)
+1.	A way to "freeze" a component
+2.	Test fails if there are any changes 
+
+二.	No Snapshots here
+1.	why:
+(1).	No TDD
+(2).	Brittle (any change to component might break snapshot)
+(3).	No Test intent
+(4).	If used, it's alongside traditional tests
