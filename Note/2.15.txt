@@ -1,3 +1,14 @@
 L15	Demo and Start Click Counter App
+.........
+
+L16	Set up Enzyme and Write Tests 
+一.	安装包
 1.	npm install ajv (以防重复 dependency)
 2.	npm install --save-dev enzyme jest-enzyme enzyme-adapter-react-16
+
+二.	测试代码
+import Enzyme, { shallow } from 'enzyme';
+import EnzymeAdapter from 'enzyme-adapter-react-16';
+.....
+Enzyme.configure({ adapter: new EnzymeAdapter() });
+....
