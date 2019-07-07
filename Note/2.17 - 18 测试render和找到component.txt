@@ -1,0 +1,46 @@
+eL17 Test Component Rendering 
+一. 项目代码
+class App extends Component {
+  render() {
+    return (
+      <div data-test="component-app">
+        // 注: 这里加 data-test 是为了测试. Enzyme能找到它
+      </div>
+    );
+  }
+}
+
+二. 测试代码
+https://airbnb.io/enzyme/docs/api/ReactWrapper/find.html 
+test('renders without error', () => {
+    var wrapper = shallow(<App />);
+    //注: 
+    var appComponent = wrapper.find("[data-test='component-app']");
+    expect(appComponent.length).toBe(1);
+});
+注: shallow 只能保证这个render成功. 但是我们想要 specific 的component 去操作.
+    所以我们在项目代码添加了 data-test="component-app" 来指明 哪个 Component
+
+
+L18 More data tes tAttribute Tests
+一. 项目代码
+      <div data-test="component-app">
+        <h1 data-test="counter-display">The counter is currently {this.state.counter}</h1>
+        <button
+          data-test="increment-button"
+          onClick={() => this.setState({ counter: this.state.counter + 1 })}    >
+          Increment counter
+      </button>
+      </div>
+
+二. 测试代码
+test('renders increment button', () => { 
+    var wrapper = shallow(<App />); 
+    var button = wrapper.find("[data-test='increment-button']");
+    expect(button.length).toBe(1);
+});
+test('renders counter display', () => { 
+    var wrapper = shallow(<App />); 
+    var counterDisplay = wrapper.find("[data-test='counter-display']");
+    expect(counterDisplay.length).toBe(1);
+});
