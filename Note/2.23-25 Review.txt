@@ -1,0 +1,7 @@
+回顾总结
+1.  shallow()
+2.  find()
+3.  setState()
+4.  state()
+5.  simulate
+6.  setUp() and findBy

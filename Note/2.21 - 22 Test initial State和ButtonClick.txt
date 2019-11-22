@@ -1,0 +1,35 @@
+L21 Test initial State
+一. 代码展示
+test('renders increment button', () => { 
+    var wrapper = setup();
+    initalCounterState = wrapper.state('counter');
+    expect(initalCounterState).toBe(0); //报错的话, 有可能是因为原来的component的state是没有设置
+});
+//注:   wrapper.state('counter'); 可以获取state里 counter
+
+L22 Test Button Click
+一. 修改 setup, 配置初始化的state
+const setup=(props={}, state=null) =>{
+    const wrapper = shallow(< App {..props}>)
+    if(state){
+        wrapper.setState(state);
+    }
+    return wrapper;
+}
+
+二. 测试部分
+test('clicking button increments counter display', () => {
+  const counter = 7;
+  const wrapper = setup(null, { counter });
+
+  // find button and click
+  const button = findByTestAttr(wrapper, 'increment-button'); //找到这个button
+  button.simulate('click'); 
+  wrapper.update();
+
+  // find display and test value
+  const counterDisplay = findByTestAttr(wrapper, 'counter-display');
+  expect(counterDisplay.text()).toContain(counter + 1)
+});
+注: 1.  button.simulate('click');  虚拟按一下的效果
+    2.  counterDisplay.text(): 是显示这个 <h1>text</h1> , 但是 视频不推荐测试任何与逻辑无关的text 
