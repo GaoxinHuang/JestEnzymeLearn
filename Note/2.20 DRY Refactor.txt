@@ -15,7 +15,6 @@ Enzyme.config({adapter: new EnzymeAdapter()});
 const setup = (props={}, state=null) =>{
     return shallow(< App {..props}>)
 }
-//注: 在L21又升级了
 
 /**
  * Return ShallowWrapper containing node(s) with the given data-test value.
