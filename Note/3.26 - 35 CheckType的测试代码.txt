@@ -1,0 +1,62 @@
+L26 - 29 介绍项目 主要工作于 Congrats Components
+
+L30 - 32 Component的代码 和 test代码
+重点如下:
+1.  text() 和 not.toBe(0) 的结合
+test('renders non-empty congrats message when `success` prop is true', () => {
+  const wrapper = setup({ success: true });
+  const message = findByTestAttr(wrapper, 'congrats-message');
+  expect(message.text().length).not.toBe(0);
+});
+
+L33 - 35. 测试 PropTypes Testing  
+1.  安装 check-props-types: npm i check-prop-types
+2.  checkProps 的封装成util的测试代码:
+import checkPropTypes from 'check-prop-types';
+export const checkProps = (component, conformingProps) => {
+  const propError = checkPropTypes(
+    component.propTypes,
+    conformingProps,
+    'prop',
+    component.name);
+  expect(propError).toBeUndefined(); //如果全部的类型都, 
+}
+
+注: checkPropTypes 是用于测试props的类型是否正确匹配。如果不正确就返回报错的exception，全正确就返回 undefined。
+下面是官网的例子
+result = checkPropTypes(HelloComponent.propTypes, { name: 123 }, 'prop', HelloComponent.name);
+assert(result === 'Failed prop type: Invalid prop `name` of type `number` supplied to `HelloComponent`, expected `string`.');
+
+3.  测试代码
+import Congrats from './Congrats';
+//a.    需要配置默认值, 因为项目代码添加 PropTypes(在4.), success就必须需要default值
+const defaultProps = { success: false };
+const setup = (props={}) => {
+  const setupProps = { ...defaultProps, ...props };
+  return shallow(<Congrats {...setupProps} />)
+}
+
+//b 实际测试的代码
+test('does not throw warning with expected props', () => {
+  const expectedProps = { success: false };
+  checkProps(Congrats, expectedProps);
+});
+
+4.  项目代码 - PropTypes
+a.  导入 PropTypes 包:  npm i prop-types
+
+b.  代码如下
+import React from 'react';
+import PropTypes from 'prop-types';
+const Congrats = (props) => {
+  if (props.success) {
+      .....
+  }
+};
+
+Congrats.propTypes = {
+  success: PropTypes.bool.isRequired 
+  //注: 设置成 success 必须是 required, 所以在测试代码里需要添加默认值
+};
+
+export default Congrats;

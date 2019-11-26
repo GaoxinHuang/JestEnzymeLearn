@@ -1,0 +1,9 @@
+一. 可作为 共有的方法
+1.  findByTestAttr
+2.  checkProps
+
+二. 不可作为共有的方法
+1.  setup() -> 因为要返回不同的component
+
+三. config的方面
+1.  Enzyme 的config

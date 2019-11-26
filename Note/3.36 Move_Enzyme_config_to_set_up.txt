@@ -1,0 +1,29 @@
+L36 Move Enzyme config to setupTests.js
+一. 实际步骤
+创建 setupTests.js在 src底下, 内容如下:
+import EnzymeAdapter from 'enzyme-adapter-react-16';
+Enzyme.configure({
+  adapter: new EnzymeAdapter(),
+  disableLifecycleMethods: true,
+});
+
+二. 解释与说明
+1.  当react app是用 create-react-app 创建的, 默认就是这个文件 setupTests.js 在 src 底下. 可以直接用以上的方法
+2.  如果不是用 create-react-app 创建的, 需要配置如 L37 Configure Jest Setup for non-create-react-app
+
+L37 Configure Jest Setup for non-create-react-app
+1.  创建一个 jest.config.js 或将以下的代码用 "jest":{ 以下的代码 } 来包裹
+module.exports={
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.js"
+    ],
+    //moduleNameMapper 是本来就有
+    "moduleNameMapper": {
+        ...
+    }
+}
+注: 当然 "<rootDir>/src/setupTests.js" 也可以按公司的案例如下
+ "setupFilesAfterEnv": [
+      "./test/setup.ts"
+    ],
+    .....
