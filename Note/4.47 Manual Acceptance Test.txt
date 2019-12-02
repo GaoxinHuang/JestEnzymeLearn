@@ -1,0 +1,4 @@
+L4.47 Manual Acceptance Test
+Manual Acceptance Test 的重点
+1.  测试基本功能是否能用
+2.  UI设计方面是否符合, 因为Unit Test 测试不到这个

@@ -1,0 +1,89 @@
+L41 PropsTypes and setup()
+一. 项目代码
+1.  component 代码
+import React from 'react';
+import PropTypes from 'prop-types';
+const GuessedWords = (props) => {
+    ...(当无 words时, contents 是data-test="guess-instructions", 
+    有则是  data-test="guessed-words" )
+    return (
+        <div data-test="component-guessed-words">
+        { contents }
+        </div>
+  );
+}; 
+2.  component PropsTypes代码 (在 component 外, 就接着component这个底下)
+GuessedWords.propTypes = {
+  guessedWords: PropTypes.arrayOf(
+    PropTypes.shape({
+      guessedWord: PropTypes.string.isRequired,
+      letterMatchCount: PropTypes.number.isRequired
+    })
+  ).isRequired,
+};
+export default GuessedWords;
+
+二. testUtils 代码
+export const checkProps = (component, conformingProps) => {
+  const propError = checkPropTypes(
+    component.propTypes,
+    conformingProps,
+    'prop',
+    component.name);
+  expect(propError).toBeUndefined();
+}
+
+三. 测试代码
+1.  默认的props
+const defaultProps = {
+  guessedWords: [{ guessedWord: 'train', letterMatchCount: 3 }],
+};
+
+2.  把 default props 加入到 setup 里 
+const setup = (props={}) => {
+  const setupProps = { ...defaultProps, ...props };
+  return shallow(<GuessedWords {...setupProps } />)
+};
+
+3.  测试的内容代码
+test('does not throw warning with expected props', () => {
+  checkProps(GuessedWords, defaultProps);
+});
+describe('if there are no words guessed', () => {
+  let wrapper
+  beforeEach(() => {
+    wrapper = setup({ guessedWords: [] });
+  });
+  test('renders without error', () => {
+    const component = findByTestAttr(wrapper, 'component-guessed-words');
+    expect(component.length).toBe(1);
+  });
+  test('renders instructions to guess a word', () => {
+    const instructions = findByTestAttr(wrapper, 'guess-instructions');
+    expect(instructions.text().length).not.toBe(0);
+  });
+});
+describe('if there are words guessed', () => {
+  let wrapper;
+  //测试数据 
+  const guessedWords = [
+    { guessedWord: 'train', letterMatchCount: 3 },
+    { guessedWord: 'agile', letterMatchCount: 1 },
+    { guessedWord: 'party', letterMatchCount: 5 },
+  ];
+  beforeEach(() => {
+    wrapper = setup({ guessedWords });
+  });
+test('correct number of guessed words', () => {
+    const guessedWordNodes = findByTestAttr(wrapper, 'guessed-word');
+    expect(guessedWordNodes.length).toBe(guessedWords.length);
+  });
+});
+注: (1) test 可以不用 describe 包裹着。 
+    (2) describe是用于需要context, 比如 beforeEach(()=>{}) 或 document
+    (3) describe 可以几个独立开, 看个人习惯
+    (4) describe 分开, 可以根据不同的情况. 比如教程里用 是否有 words
+    (5) describe 里面可以写这个describe底下的独立的数据或方法
+
+
+
