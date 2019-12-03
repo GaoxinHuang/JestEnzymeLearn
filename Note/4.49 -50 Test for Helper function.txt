@@ -1,0 +1,36 @@
+L49 Test for Helper function
+一. 项目代码 
+/**
+ * @method getLetterMatchCount
+ * @param {string} guessedWord - Guessed word.
+ * @param {string} secretWord - Secret word.
+ * @returns {number} - Number of letters matched between guessed word and secret word.
+ */
+export function getLetterMatchCount(guessedWord, secretWord) {
+    const secretLetters = secretWord.split('');
+    const guessedLetterSet = new Set(guessedWord);
+    return secretLetters.filter(letter => guessedLetterSet.has(letter)).length;
+};
+
+二. 测试代码
+import { getLetterMatchCount } from './';
+describe('getLetterMatchCount', () => {
+  const secretWord = 'party';
+  test('returns correct count when there are no matching letters', () => {
+    const letterMatchCount = getLetterMatchCount('bones', secretWord);
+    expect(letterMatchCount).toBe(0);
+  });
+  test('returns the correct count where there are 3 matching letters', () => {
+    const letterMatchCount = getLetterMatchCount('train', secretWord);
+    expect(letterMatchCount).toBe(3);
+  });
+  test('returns correct count when there are duplicate letters in the guess', () => {
+    const letterMatchCount = getLetterMatchCount('parka', secretWord);
+    expect(letterMatchCount).toBe(3);
+  });
+});
+注: 因为这里没有用到任何 component, 所以不需要 enzyme
+
+
+L50 Redux or Hooks
+推荐 Redux first
