@@ -1,0 +1,28 @@
+L55 - 56 success reducer 和 test 
+一. 项目代码
+import { actionTypes } from '../actions';
+
+export default (state=false, action) => {
+  switch(action.type) {
+    case (actionTypes.CORRECT_GUESS):
+      return true;
+    default:
+      return state;
+  }
+}
+
+二. 测试代码
+import { actionTypes } from '../actions';
+import successReducer from './successReducer';
+test('returns default initial state of `false` when no action is passed', () => {
+  const newState = successReducer(undefined, {});  
+  //注: 虽然state 有了默认值, 但是action需要传过来一个 action.type(尽管是{}.type 是null), 所以需要{}
+  expect(newState).toBe(false);
+});
+
+test('returns state of true upon receiving an action of type `CORRECT_GUESS`', () => {
+  const newState = successReducer(undefined, { type: actionTypes.CORRECT_GUESS });
+  expect(newState).toBe(true);
+});
+
+L57 讲一些没用的概念

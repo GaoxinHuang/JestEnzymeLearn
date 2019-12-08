@@ -1,0 +1,19 @@
+L51 - 53 都是将项目介绍 都在文件夹底下
+
+L54.action Creator
+一.项目代码 - action文件夹底下的代码
+export const actionTypes = {
+  CORRECT_GUESS: 'CORRECT_GUESS',
+  GUESS_WORD: 'GUESS_WORD',
+  SET_SECRET_WORD: 'SET_SECRET_WORD',
+};
+export function correctGuess(){
+    return {type: actionTypes:actionTypes.CORRECT_GUESS };
+}
+
+二. 测试代码
+import {correctGuess, actionTypes} from "./index.js";
+describe('x',()=>{
+  const action = correctGuess();
+  expect(action).toEqual({type: acttionTypes.CORRECT_GUESS }); //toEqual 不会比较地址值
+});

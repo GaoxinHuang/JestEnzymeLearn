@@ -1,4 +1,4 @@
-一.	ajv 是什么, 什么作用
+一.	ajv 是什么, 什么作用 (L2.15-16)
 1.	作用:	避免 因为peer dependency而出现 npm bug
 warning信息如下 --- UNMET PEER DEPENDENCY webpack@3.0.0
 
@@ -16,3 +16,6 @@ warning信息如下 --- UNMET PEER DEPENDENCY webpack@3.0.0
 	
 	ajx的目的就是 避免 因为peer dependency出现 npm bug
 
+二.	wrapper.debug() - 就会展示 如果有什么render的bug
+  const wrapper = shallow(<Input store={store} />).dive();
+  consolo.log(wrapper.debug());
