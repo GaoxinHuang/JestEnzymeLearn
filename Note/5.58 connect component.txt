@@ -23,7 +23,7 @@ export const storeFactory = (initialState) => {
   return creatStore(rootReducer, initialState) //这只是版本1
 }
 
-二. 更新L61 测试代码
+二. 更新L62 测试代码
 const setup = (initialState={}) => {
   const store = storeFactory(initialState);
   const wrapper = shallow(<Input store={store} />).dive().dive(); // -> 这里就 return 是当前的那个component的具体内容
@@ -33,3 +33,13 @@ const setup = (initialState={}) => {
 注: (1) 因为shallow 只有 render表面的 component, 无法深入render到它的children之类的. 
         而shallow 的connect component只是render 成 <ContextProvider><Input store={...} dispatch={...}></ContextProvider>
         而我们需要的是 input 的里面的内容。 所以dive() 就是 进下面的一层 level
+
+L63 Summary of Connected Component Setup and Choice
+本节就是讨论有几种方法去测试 connected Component
+一. 方案一: 用 redux-mock-store 去mock redux (Enzyme 推荐这个)
+1.  更接近 app
+2.  can work with store
+
+二. 方案二: 断开 connected 连接, 直接去测试 Connected Component (Redux testing doc 推荐这个)
+1.  可以pass mock action 
+2.  更具体的UI细节(feature)
