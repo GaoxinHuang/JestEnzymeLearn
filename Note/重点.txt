@@ -19,3 +19,5 @@ warning信息如下 --- UNMET PEER DEPENDENCY webpack@3.0.0
 二.	wrapper.debug() - 就会展示 如果有什么render的bug
   const wrapper = shallow(<Input store={store} />).dive();
   consolo.log(wrapper.debug());
+
+三.	dive(): 进入更深的component

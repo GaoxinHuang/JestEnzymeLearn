@@ -43,3 +43,14 @@ L63 Summary of Connected Component Setup and Choice
 二. 方案二: 断开 connected 连接, 直接去测试 Connected Component (Redux testing doc 推荐这个)
 1.  可以pass mock action 
 2.  更具体的UI细节(feature)
+
+L64 Input Tests and Code for success = false
+一. 项目代码
+  const contents = this.props.success? null: ....
+注: null 其实可以在 react 里用的, 就返回一个空的
+
+二. 测试代码
+test('renders submit button', () => {
+      const submitButton = findByTestAttr(wrapper, 'submit-button');
+      expect(submitButton.length).toBe(1);
+});
