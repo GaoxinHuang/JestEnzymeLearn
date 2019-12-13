@@ -44,13 +44,14 @@ L63 Summary of Connected Component Setup and Choice
 1.  可以pass mock action 
 2.  更具体的UI细节(feature)
 
-L64 Input Tests and Code for success = false
+L64 - L65 Input Tests and Code for success = false 
 一. 项目代码
   const contents = this.props.success? null: ....
 注: null 其实可以在 react 里用的, 就返回一个空的
 
 二. 测试代码
+就是一些render 的方法, 治理举一个例子
 test('renders submit button', () => {
       const submitButton = findByTestAttr(wrapper, 'submit-button');
       expect(submitButton.length).toBe(1);
-});
+    });
