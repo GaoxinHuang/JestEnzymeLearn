@@ -19,31 +19,30 @@ export const storeFactory = (initialState) => {
 }
 
 71. Thunk Test planning
-1.  主要工作于secretWord
-2.  这个是 Integration Test
-3.  需要创建 Integration.test.js (其实就是action和 store 结合的测试)
+1.  这个是 Integration Test (需要mock secretWord, 然后用于 guessedWord )
+2.  需要创建 Integration.test.js (其实就是action和 store 结合的测试)
+-----------------------------------------------------------------------------------
 
-72. Actions 和 store 的测试 - Set up 'guess words' tests 
-一. 项目代码:
+72 - 73. Actions 和 store 的测试 - Set up 'guess words' tests 
+一. 重点
+1.  state.getState(); 可以获取当前的 state的值
+2.  state.getActions(公司用的): 可以获取 action 和对应的 data (其实没必要)
+
+二. 项目代码:
 1.  action的代码
 export const guessWord = (guessedWord) => {
   return function(dispatch, getState) {
     const secretWord = getState().secretWord;
     const letterMatchCount = getLetterMatchCount(guessedWord, secretWord);
-    dispatch({
-      type: actionTypes.GUESS_WORD,
-      payload: { guessedWord, letterMatchCount }
-    });
-
+    dispatch({  type: actionTypes.GUESS_WORD,   payload: { guessedWord, letterMatchCount }});
     if (guessedWord === secretWord) {
       dispatch({ type: actionTypes.CORRECT_GUESS });
     }
-
   };
 };
 
-二. 测试代码:
-1.  integration.test.js
+三. 测试代码:
+1.  integration.test.js (其实就是已经mock secretWord 的word 是什么了, 等于需要mock 对应的 initialState)
 import { storeFactory } from '../test/testUtils';
 import { guessWord } from './actions';
 
@@ -69,20 +68,9 @@ describe('guessWord action dispatcher', () => {
       };
       expect(newState).toEqual(expectedState);
     });
-    test('updates state correctly for successful guess', () => {
-      store.dispatch(guessWord(secretWord));
-      const newState = store.getState()
-      const expectedState = {
-        secretWord,
-        success: true,
-        guessedWords: [{
-          guessedWord: secretWord,
-          letterMatchCount: 5,
-        }],
-      };
-      expect(newState).toEqual(expectedState);
-    });
   });
+
+  //下面是 第二次猜的时候, 所以使用的
   describe('some guessed words', () => {
     const guessedWords = [ { guessedWord: 'agile', letterMatchCount: 1 } ];
     const initialState = { guessedWords, secretWord }
@@ -91,14 +79,7 @@ describe('guessWord action dispatcher', () => {
       store = storeFactory(initialState);
     })
     test('updates state correctly for unsuccessful guess', () => {
-      store.dispatch(guessWord(unsuccessfulGuess));
-      const newState = store.getState();
-      const expectedState = {
-        secretWord,
-        success: false,
-        guessedWords: [...guessedWords, { guessedWord: unsuccessfulGuess, letterMatchCount: 3 }]
-      };
-      expect(newState).toEqual(expectedState);
+        .....
     });
     test('updates state correctly for successful guess', () => {
       store.dispatch(guessWord(secretWord));
@@ -106,10 +87,10 @@ describe('guessWord action dispatcher', () => {
       const expectedState = {
         secretWord,
         success: true,
-        guessedWords: [...guessedWords,
-          { guessedWord: secretWord, letterMatchCount: 5 }]
+        guessedWords: [...guessedWords, { guessedWord: secretWord, letterMatchCount: 5 }]
       };
       expect(newState).toEqual(expectedState);
     });
   });
 });
+

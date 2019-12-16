@@ -1,0 +1,38 @@
+L74.    Add 'secretWordReducer'
+secretWordReducer.js
+export default (state=null, action) => {
+  switch (action.type) {
+    case actionTypes.SET_SECRET_WORD:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
+L75.    Remaining Tests - 已经把内容写道 L73里
+
+L76.   Write Reducer and Action Creator
+一. guessedWordsReducer.js - 就是更新 state
+export default (state=[], action) => {
+  switch(action.type) {
+    case actionTypes.GUESS_WORD:
+      return [...state, action.payload];
+    default:
+      return state;
+  }
+}
+
+二. actions 
+export const guessWord = (guessedWord) => {
+  return function(dispatch, getState) {
+    const secretWord = getState().secretWord;
+    const letterMatchCount = getLetterMatchCount(guessedWord, secretWord);
+    dispatch({  type: actionTypes.GUESS_WORD,   payload: { guessedWord, letterMatchCount }  }); 
+    //注:   就是告诉它, 已经guess, 其实就是等于"猜错了", 做什么
+    if (guessedWord === secretWord) {
+      dispatch({ type: actionTypes.CORRECT_GUESS }); //就是告诉它, success guess
+    }
+  };
+};
+
+L77.    总结 (无用)

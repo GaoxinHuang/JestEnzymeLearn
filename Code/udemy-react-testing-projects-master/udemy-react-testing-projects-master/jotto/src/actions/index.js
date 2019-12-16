@@ -28,7 +28,6 @@ export const guessWord = (guessedWord) => {
     if (guessedWord === secretWord) {
       dispatch({ type: actionTypes.CORRECT_GUESS });
     }
-
   };
 };
 
