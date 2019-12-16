@@ -1,0 +1,115 @@
+67 - 68.    Planning 
+
+69. Redux Thunk - Redux thunk 就是 return function
+
+70. install redux-thunk 
+一.  项目代码 - 
+1.  configureStore.js
+import ReduxThunk from 'redux-thunk';
+import rootReducer from './reducers';
+export const middleware = [ReduxThunk];
+const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore);
+export default createStoreWithMiddleware(rootReducer);
+
+2.  测试代码改成
+import {middlewares} from "./configureStore.js";
+export const storeFactory = (initialState) => {
+  const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore)
+  return createStoreWithMiddleware(rootReducer, initialState);
+}
+
+71. Thunk Test planning
+1.  主要工作于secretWord
+2.  这个是 Integration Test
+3.  需要创建 Integration.test.js (其实就是action和 store 结合的测试)
+
+72. Actions 和 store 的测试 - Set up 'guess words' tests 
+一. 项目代码:
+1.  action的代码
+export const guessWord = (guessedWord) => {
+  return function(dispatch, getState) {
+    const secretWord = getState().secretWord;
+    const letterMatchCount = getLetterMatchCount(guessedWord, secretWord);
+    dispatch({
+      type: actionTypes.GUESS_WORD,
+      payload: { guessedWord, letterMatchCount }
+    });
+
+    if (guessedWord === secretWord) {
+      dispatch({ type: actionTypes.CORRECT_GUESS });
+    }
+
+  };
+};
+
+二. 测试代码:
+1.  integration.test.js
+import { storeFactory } from '../test/testUtils';
+import { guessWord } from './actions';
+
+describe('guessWord action dispatcher', () => {
+  const secretWord = 'party';
+  const unsuccessfulGuess = 'train';
+  describe('no guessed words', () => {
+    let store;
+    const initialState = { secretWord };
+    beforeEach(() => {
+      store = storeFactory(initialState);
+    });
+    test('updates state correctly for unsuccessful guess', () => {
+      store.dispatch(guessWord(unsuccessfulGuess));
+      const newState = store.getState()
+      const expectedState = {
+        ...initialState,
+        success: false,
+        guessedWords: [{
+          guessedWord: unsuccessfulGuess,
+          letterMatchCount: 3
+        }]
+      };
+      expect(newState).toEqual(expectedState);
+    });
+    test('updates state correctly for successful guess', () => {
+      store.dispatch(guessWord(secretWord));
+      const newState = store.getState()
+      const expectedState = {
+        secretWord,
+        success: true,
+        guessedWords: [{
+          guessedWord: secretWord,
+          letterMatchCount: 5,
+        }],
+      };
+      expect(newState).toEqual(expectedState);
+    });
+  });
+  describe('some guessed words', () => {
+    const guessedWords = [ { guessedWord: 'agile', letterMatchCount: 1 } ];
+    const initialState = { guessedWords, secretWord }
+    let store;
+    beforeEach(() => {
+      store = storeFactory(initialState);
+    })
+    test('updates state correctly for unsuccessful guess', () => {
+      store.dispatch(guessWord(unsuccessfulGuess));
+      const newState = store.getState();
+      const expectedState = {
+        secretWord,
+        success: false,
+        guessedWords: [...guessedWords, { guessedWord: unsuccessfulGuess, letterMatchCount: 3 }]
+      };
+      expect(newState).toEqual(expectedState);
+    });
+    test('updates state correctly for successful guess', () => {
+      store.dispatch(guessWord(secretWord));
+      const newState = store.getState();
+      const expectedState = {
+        secretWord,
+        success: true,
+        guessedWords: [...guessedWords,
+          { guessedWord: secretWord, letterMatchCount: 5 }]
+      };
+      expect(newState).toEqual(expectedState);
+    });
+  });
+});
