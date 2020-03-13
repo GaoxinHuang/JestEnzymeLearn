@@ -1,0 +1,12 @@
+L83 Reducer 项目代码 - reducer/secretWordReducer.js
+export default (state=null, action) => {
+  switch (action.type) {
+    case actionTypes.SET_SECRET_WORD:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
+L84 summary
+重点就是需要 return 和 then的操作, 才能到 callback的内容
