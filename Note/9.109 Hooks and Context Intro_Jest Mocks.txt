@@ -1,0 +1,29 @@
+一.	what is a mock function 
+1.	Fak function that runs instead of a real function 
+	(1)	Can run alternate code, or just act as a placeholder
+2.	Jest replace real function with mock 
+3.	Can assert on:
+	(1)	how many times mock ran during tests
+	(2)	with what arguments
+
+二.	Replacement function 
+1.	In redux, only spied on mock functions
+2.	here, will sometimes make replacement functions
+	(1)	Replacement function will return values 
+3.	Mocks serve three purposes
+	(1)	Keep real function from running 
+		a.	prevent side-effect like network calls
+	(2)	Spy on function to see when it's called
+	(3)	Provide return values 
+		a.	set up test conditions
+		
+三.	Warning for mocks in jest (这个有用)
+1.	Reset propertes on modules to replace functions with mocks (重新)
+2.	This means: no destructuring on imports in non-test in non-test code (注: destructuring 就是 解构), 比如
+(1)	import React from 'react';
+const x = React.useContext(XxxContext);
+//mock useContext 就可以工作
+
+(2)	import { useContext } from 'react';
+const x = React.useContext(XxxContext);
+//mock useContext 可能不可以工作 
