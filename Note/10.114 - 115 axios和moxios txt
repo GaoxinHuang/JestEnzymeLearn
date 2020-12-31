@@ -1,0 +1,57 @@
+L114-L115 Test getSecretWord - axios 和 moxios 的测试
+一. 源代码
+hookActions.js
+import axios from 'axios';
+export const getSecretWord = async (setSecretWord, setServerError) => {
+  try {
+    const response = await axios.get('http://localhost:3030');
+    setSecretWord(response.data);
+  }
+  catch {
+    setServerError(true);
+  }
+}
+// default export for mocking convenience
+export default {
+  getSecretWord,
+}
+注: setSecretWord 是传来一个方法, 而那个方法在 App.js 其实是类似于useReducer 的action 的 dispatch 的方法
+
+二. 测试代码
+import moxios from 'moxios';
+import { getSecretWord } from './hookActions';
+describe('moxios tests', () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
+  describe('non-error response', () => {
+    // create mocks for callback args
+    const mockSetSecretWord = jest.fn();
+    const mockSetServerError = jest.fn();
+    const secretWord = 'party';
+      
+    beforeEach(async () => {
+      moxios.wait(() => {
+        const request = moxios.requests.mostRecent();
+        request.respondWith({
+          status: 200,
+          response: secretWord,
+        });
+      });
+      
+      await getSecretWord(mockSetSecretWord, mockSetServerError);
+      
+    });
+    test('calls the getSecretWord callback on axios response', async () => {
+     // see whether mock was run with the correct argument
+      expect(mockSetSecretWord).toHaveBeenCalledWith(secretWord);
+    });
+    test('does not call the setServerError callback on axios response', async () => {
+     // see whether mock was run with the correct argument
+      expect(mockSetServerError).not.toHaveBeenCalled();
+    });
+  });

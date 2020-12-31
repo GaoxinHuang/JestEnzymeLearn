@@ -1,0 +1,11 @@
+L110 - L112
+重点:   做一个 before each
+describe('state controlled input field', () => {
+  let mockSetCurrentGuess = jest.fn();
+  let wrapper;
+  beforeEach(() => {
+    mockSetCurrentGuess.mockClear(); // 需要这个mockClear()
+    React.useState = jest.fn(() => ["", mockSetCurrentGuess]);
+    wrapper = setup();
+  });
+}
