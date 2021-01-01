@@ -1,0 +1,52 @@
+L118    useReducer Hook: what and why
+一.  why
+1.  more than one item 绑定一起 in state 
+2.  difficult to test, 
+(1) 因为需要mock 两个 useState 
+(2) mock 的 两个function 需要指定前后return的顺序 
+
+3.  为什么不用useState with object
+(1) 需要保证其他property不被破坏, 因为useState 接受你传来的值, 而不管之前的
+
+L119 Code useEffect and useReducer to pass Tests
+！！！自我学习
+教程中的action, reducer 和 component的结合
+1.  reducer (和我们一样) 
+function reducer(state, action) {
+  switch (action.type) {
+    case "setSecretWord":
+      return { ...state, secretWord: action.payload };
+    ....
+    default:
+      throw new Error(`Invalid action type: ${action.type}`);
+  }
+}
+
+2.  action 
+export const getSecretWord = async (setSecretWord, setServerError) => {
+    const response = await axios.get('http://localhost:3030');
+    setSecretWord(response.data);
+}
+// default export for mocking convenience
+export default {
+  getSecretWord,
+}
+
+3.  component 
+App.js
+function App(){
+    const [state, dispatch] = React.useReducer(reducer, { secretWord: null });
+    const setSecretWord = (secretWord) => dispatch({
+    type: "setSecretWord",
+    payload: secretWord
+  });
+    React.useEffect(()=>{
+        hookActions.getSecretWord(setSecretWord)
+  },[]);
+}
+！！！注:
+(1) 教程中的 reducer 和我的写法没有区别
+(2) !!! 教程中是把component是 把一整个方法 传到 action过去, 而不是单独传 dispatch
+a.  等action 做完 callback 方法后, 然后就可以把 callback 的data 传到这个方法上
+    这样同样达到了 dispatch的效果, 貌似还可以方便直接mock 这个action 方法来查看它是否被调用
+    而在 action 的测试里, 只要直接mock 传来的方法是否被调用即可
