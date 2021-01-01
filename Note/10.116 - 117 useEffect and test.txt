@@ -1,0 +1,11 @@
+L116 10.116 useEffect and how to test with Enzyme
+一. 注意点
+1.  用 mount 
+(1) useEffect not called on shallow - https://github.com/enzymejs/enzyme/issues/2086
+(2) 当 fixed, 可能考虑用 shallow() in setup()
+
+2.  Set up mock in setup() -> scope mock globally
+3.  Clear mock in setup() -> mock tracks calls cumulatively(积累) until reset
+
+L117 Test getSecretWord is called on App mount - 略
+详见代码 - 其实就是主要提及要用 useEffect
