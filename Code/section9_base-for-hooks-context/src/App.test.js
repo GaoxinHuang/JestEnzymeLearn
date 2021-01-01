@@ -7,9 +7,19 @@ import hookActions from './actions/hookActions';
 
 const mockGetSecretWord = jest.fn();
 
-const setup = () => {
+const setup = (secretWord = 'party') => {
   mockGetSecretWord.mockClear();
   hookActions.getSecretWord = mockGetSecretWord; //mock 这个 getSecretWord
+
+  // mock reuder 的初始值
+  const mockUseReducer = jest.fn()
+  .mockReturnValue([
+    { secretWord, language: 'en' },
+    jest.fn()
+  ]);
+
+  React.useReducer = mockUseReducer;
+
   //use mount, because useEffect not called on 'shallow'
   return mount(<App />);
 }
