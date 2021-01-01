@@ -15,7 +15,8 @@ export const getSecretWord = async (setSecretWord, setServerError) => {
 export default {
   getSecretWord,
 }
-注: setSecretWord 是传来一个方法, 而那个方法在 App.js 其实是类似于useReducer 的action 的 dispatch 的方法
+注: 1.  setSecretWord 是传来一个方法, 而那个方法在 App.js 其实是类似于useReducer 的action 的 dispatch 的方法
+    2.  故意 export default { getSecretWord } 是用于以后其他的mock方法
 
 二. 测试代码
 import moxios from 'moxios';
