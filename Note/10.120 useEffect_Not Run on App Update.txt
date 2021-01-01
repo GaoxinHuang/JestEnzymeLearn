@@ -1,0 +1,14 @@
+L120    Test getSecretWord Does not run on App update
+一. 几个重点
+1.  Will trigger update with Enzyme setProps()
+    (1) update() does not tirgger useEffect() - https://github.com/enzymejs/enzyme/issues/2254
+    (2) cost of being an early adopter! Enzyme is still catching up
+
+2.  代码
+只需要调用
+const wrapper = setup();
+mockGetSecretWord.mockClear(); // 需要清理之前的call
+// wrapper.update() doesn't trigger update
+// (issue forked from https://github.com/airbnb/enzyme/issues/2091)
+wrapper.setProps();
+expect(mockGetSecretWord).not.toHaveBeenCalled();
