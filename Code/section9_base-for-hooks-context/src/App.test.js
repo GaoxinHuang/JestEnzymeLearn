@@ -48,3 +48,20 @@ describe('getSecretWord calls', () => {
     expect(mockGetSecretWord).not.toHaveBeenCalled();
   });
 });
+
+describe("secretWord is not null", () => {
+  let wrapper;
+  beforeEach(() => {
+    wrapper = setup("party");
+  });
+
+  test("renders app when secretWord is not null", () => {
+    const appComponent = findByTestAttr(wrapper, "component-app");
+    expect(appComponent.exists()).toBe(true);
+  });
+  test("does not render spinner when secretWord is not null", () => {
+    const spinnerComponent = findByTestAttr(wrapper, "spinner");
+    expect(spinnerComponent.exists()).toBe(false);
+  });
+
+});

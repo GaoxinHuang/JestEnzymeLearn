@@ -1,4 +1,53 @@
 L121 secretWord Prop Warning for input &  L122 Loading spinner planning
 略
 
-L123 
+L123 & L124 Test Loading Spinner - useReducer
+一. 源代码 - L124
+App.js
+function App(){
+    ....
+    if(!state.secretWord) {
+    return (
+      <div className="container" data-test="spinner">
+        <div className="spinner-border" role="status">
+          <span className="sr-only">Loading...</span>
+        </div>
+        <p>Loading secret word</p>
+      </div>
+    );
+  }
+}
+
+二. 测试代码 - L123
+const mockGetSecretWord = jest.fn();
+const setup = (secretWord = 'party') => {
+  mockGetSecretWord.mockClear();
+  hookActions.getSecretWord = mockGetSecretWord; //mock 这个 getSecretWord的action 的function
+
+  // mock reuder 的初始值
+  const mockUseReducer = jest.fn()
+  .mockReturnValue([
+    { secretWord, language: 'en' },
+    jest.fn()
+  ]);
+
+  React.useReducer = mockUseReducer;
+
+  //use mount, because useEffect not called on 'shallow'
+  return mount(<App />);
+}
+
+describe("secretWord is not null", () => {
+  let wrapper;
+  beforeEach(() => {
+    wrapper = setup("party");
+  });
+  test("renders app when secretWord is not null", () => {
+    const appComponent = findByTestAttr(wrapper, "component-app");
+    expect(appComponent.exists()).toBe(true);
+  });
+  test("does not render spinner when secretWord is not null", () => {
+    const spinnerComponent = findByTestAttr(wrapper, "spinner");
+    expect(spinnerComponent.exists()).toBe(false); //新的 assert 的 exists() !!!
+  });
+});
