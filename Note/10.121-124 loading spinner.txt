@@ -31,7 +31,7 @@ const setup = (secretWord = 'party') => {
     jest.fn()
   ]);
 
-  React.useReducer = mockUseReducer;
+  React.useReducer = mockUseReducer; // 这样去 mock useReducer这里
 
   //use mount, because useEffect not called on 'shallow'
   return mount(<App />);
