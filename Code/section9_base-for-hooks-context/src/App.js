@@ -3,6 +3,9 @@ import hookActions from './actions/hookActions';
 import './App.css';
 import Input from './Input';
 
+import LanguagePicker from './LanguagePicker';
+import languageContext from './contexts/languageContext'
+
 /**
  * Reducer to update state, called automatically by dispatch
  * @param state {object} - existing state
@@ -34,17 +37,20 @@ function reducer(state, action) {
 }
 
 function App() {
-  const [state, dispatch] = React.useReducer(reducer, { secretWord: null });
+  const [state, dispatch] = React.useReducer(reducer, { secretWord: null, language: 'en' });
   const setSecretWord = (secretWord) => dispatch({
     type: "setSecretWord",
     payload: secretWord
   });
 
-  React.useEffect(()=>{
-    hookActions.getSecretWord(setSecretWord)
-  },[]);
+  const setLanguage = (language) =>
+    dispatch({ type: "setLanguage", payload: language });
 
-  if(!state.secretWord) {
+  React.useEffect(() => {
+    hookActions.getSecretWord(setSecretWord)
+  }, []);
+
+  if (!state.secretWord) {
     return (
       <div className="container" data-test="spinner">
         <div className="spinner-border" role="status">
@@ -54,10 +60,15 @@ function App() {
       </div>
     );
   }
-  
+
   return <div className="container" data-test='component-app'>
-           <Input secretWord={state.secretWord} />
-     </div>
+    <h1>Jotto</h1>
+    <languageContext.Provider value={state.language}>
+      <LanguagePicker setLanguage={setLanguage} />
+      <Input secretWord={state.secretWord} />
+    </languageContext.Provider>
+
+  </div>
 }
 
 export default App;

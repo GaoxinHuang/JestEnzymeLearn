@@ -1,24 +1,28 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 
 import { findByTestAttr, checkProps } from '../test/testUtils';
 import Congrats from './Congrats';
+import languageContext from './contexts/languageContext';
 
-const defaultProps = { success: false };
 
 /**
-* Factory function to create a ShallowWrapper for the Congrats component.
+* Factory function to create a ReactWrapper for the Congrats component.
 * @function setup
 * @param {object} props - Component props specific to this setup.
-* @returns {ShallowWrapper}
+* @returns {ReactWrapper}
 */
-const setup = (props={}) => {
-  const setupProps = { ...defaultProps, ...props };
-  return shallow(<Congrats {...setupProps} />)
+const setup = ({ success, language }) => {
+  language = language || 'en';
+  success = success || false;
+  return mount(
+    <languageContext.Provider value={language}>
+      <Congrats success = {success} />)
+  </languageContext.Provider>);
 }
 
 test('renders without error', () => {
-  const wrapper = setup();
+  const wrapper = setup({});
   const component = findByTestAttr(wrapper, 'component-congrats');
   expect(component.length).toBe(1);
 });
