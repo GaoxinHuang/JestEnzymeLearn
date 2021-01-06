@@ -1,0 +1,3 @@
+L11.131 - 11.134 Language Package - 只是一个普通的组件
+重点:   这里用 shallow 去测试 Language Package, 因为只是普通的 function 组件
+        而且 mount 是用于 useEffect
