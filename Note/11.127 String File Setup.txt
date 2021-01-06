@@ -1,0 +1,64 @@
+L125 - L126 略 (只是 plan 和理论)
+L127  String File Setup &  L128 - String Tests & L129 Code getStringByLanguage
+一. 源代码
+const languageStrings = {
+  en: {
+      ...
+  },
+  emoji: {
+      ....
+  }
+}
+function getStringByLanguage(languageCode, stringKey, strings=languageStrings) {
+  if (!strings[languageCode] || !strings[languageCode][stringKey]) {
+    console.warn(`Could not get string [${stringKey}] for [${languageCode}]`);
+    // fall back to english
+    return strings.en[stringKey];
+  }
+  return strings[languageCode][stringKey];
+}
+// for future mocking
+export default {
+  getStringByLanguage,
+}
+注: 1.  一样, 功能性代码都是用 export default 来方便mock 
+
+二. 测试代码
+import stringsModule from './strings';
+const { getStringByLanguage } = stringsModule;
+
+describe('language string testing', () => {
+  const mockWarn = jest.fn();
+  let originalWarn;
+
+  beforeEach(() => {
+    originalWarn = console.warn;
+    console.warn = mockWarn;
+  });
+
+  afterEach(() => {
+    console.warn = originalWarn;
+  });
+  test('returns correct submit string for english', () => {
+    const string = getStringByLanguage('en', 'submit', strings);
+    expect(string).toBe('submit');
+    expect(mockWarn).not.toHaveBeenCalled();
+  });
+});
+注: 1.  
+import stringsModule from './strings';
+const { getStringByLanguage } = stringsModule;
+这个只是为了 import, 或者直接 import { getStringByLanguage } from './strings';
+
+2.  我们也可以直接mock console.warn 如上
+  const mockWarn = jest.fn();
+  let originalWarn;
+
+  beforeEach(() => {
+    originalWarn = console.warn;
+    console.warn = mockWarn;
+  });
+
+  afterEach(() => {
+    console.warn = originalWarn; //因为mock 会mock 整个file的代码, 会影响其他测试的，所以需要指回去
+  });
