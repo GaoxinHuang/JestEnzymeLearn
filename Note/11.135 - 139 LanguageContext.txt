@@ -1,0 +1,12 @@
+L137 Congrats Language Context Test Setup
+一. 如何去mock 一个 Context
+1.  Contrats.test.js
+import languageContext from './contexts/languageContext';
+const setup = ({ success, language }) => {
+  language = language || 'en';
+  success = success || false;
+  return mount(
+    <languageContext.Provider value={language}>
+      <Congrats success = {success} />)
+  </languageContext.Provider>);
+}

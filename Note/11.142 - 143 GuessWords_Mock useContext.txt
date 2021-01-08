@@ -1,0 +1,24 @@
+11.142 Mock useContext
+一. 源代码
+GuessWords.js
+const GuessedWords = () => {
+    const language = React.useContext(languageContext);
+    ... //有用到 language
+}
+
+二. 测试代码 
+GuessedWords.test.js
+const setup = (guessedWords=[]) => {
+  const mockUseGuessedWords = jest.fn().mockReturnValue([guessedWords, jest.fn()]);
+  guessedWordsContext.useGuessedWords = mockUseGuessedWords;
+  return shallow(<GuessedWords />)
+};
+describe("languagePicker", () => {
+  test("correctly renders guess instructions string in emoji", () => {
+    const mockUseContext = jest.fn().mockReturnValue('emoji');
+    React.useContext = mockUseContext;
+    const wrapper = setup([]);
+    const guessInstructions = findByTestAttr(wrapper, "guess-instructions");
+    expect(guessInstructions.text()).toBe('🤔🤫🔤');
+  });
+});
