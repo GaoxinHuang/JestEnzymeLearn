@@ -1,0 +1,11 @@
+L145 Context with Embedded state
+重点:   Embedded state 就是在 React Context 底下有 manage state, 比如 useState 在 Context里
+(感觉和我在公司的项目差不多， 可以回头总结一下)
+
+L146 Code Success Context
+1.  用 React.useMemo 来不要重复 render 
+function SuccessProvider(props) {
+    const [success, setSuccess] = React.useState(false);
+    const value = React.useMemo(() => [success, setSuccess], [success]);
+    return <successContext.Provider value={value} {...props} />
+}
