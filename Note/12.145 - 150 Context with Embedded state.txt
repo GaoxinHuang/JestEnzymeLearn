@@ -1,0 +1,79 @@
+L145 Context with Embedded state
+重点:   Embedded state 就是在 React Context 底下有 manage state, 比如 useState 在 Context里
+(感觉和我在公司的项目差不多， 可以回头总结一下)
+
+L146 Code Success Context
+function SuccessProvider(props) {
+    const [success, setSuccess] = React.useState(false);
+
+    // No need to test this -- React tests useMemo for us!
+    const value = React.useMemo(() => [success, setSuccess], [success]);
+    return <successContext.Provider value={value} {...props} />
+}
+注: 1.  用 React.useMemo 来不要重复 render
+    2.  !!!value 里包含了 success 和 setSuccess, 把 setSuccess 往外传达
+    3.  个人觉得context的 value 还是用 [], 因为不需要太管json format.(看下为什么公司我用 object) 
+
+L147 Test Success Context
+1.  测试内容 - 
+a.  保证 能调用useSuccess
+b.  保证 Provider 能 wrapper Component
+
+2.  代码
+// a functional component that calls useSuccess for our tests
+const FunctionalComponent = () => {
+  successContext.useSuccess();
+  return <div />;
+}
+test('useSuccess throws error when not wrapped in SuccessProvider', () => {
+  expect(() => {
+    shallow(<FunctionalComponent />);
+  }).toThrow('useSuccess must be used within a SuccessProvider');
+});
+
+test('useSuccess does not throw error when wrapped in SuccessProvider', () => {
+  expect(() => {
+    mount(
+      <successContext.SuccessProvider>
+        <FunctionalComponent />
+      </successContext.SuccessProvider>
+    )
+  }).not.toThrow();
+})
+
+L148   guessWordsContext Context (略, 内容和 Success Context 一样)
+
+L149  Set up Congrats and App Components for Success Context Testing
+一. Provider 的代码
+<successContext.SuccessProvider> 
+....
+</successContext.SuccessProvider>
+注: 因为 value 已经设好了
+
+二. 调用 successContext的代码
+import successContext from "./contexts/successContext";
+const Congrats = () => {
+    const [ success, setSuccess ] = successContext.useSuccess();
+  if (success) {
+    .....
+  }
+};
+
+L150 Test Congrats Success Context
+1.  代码
+// for testing that setSuccess is called with false on click
+const mockSetSuccess = jest.fn()
+const setup = ({ success, language }) => {
+  language = language || 'en';
+  success = success || false;
+
+  return mount(
+    <languageContext.Provider value={language}>
+      <successContext.SuccessProvider value={[success, mockSetSuccess]}>
+        <Congrats />
+      </successContext.SuccessProvider>
+    </languageContext.Provider>
+  );
+}
+2.  注: 因为传递了 setSuccess, 所以mock setSuccess, 
+        为了查看有被调用可以, 自己mock, 记得要 mockSetSuccess

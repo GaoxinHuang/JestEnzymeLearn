@@ -1,10 +1,19 @@
 import React from 'react';
-import hookActions from './actions/hookActions';
 import './App.css';
-import Input from './Input';
+import hookActions from './actions/hookActions';
+import languageContext from './contexts/languageContext';
+import successContext from './contexts/successContext';
+import guessedWordsContext from './contexts/guessedWordsContext';
 
 import LanguagePicker from './LanguagePicker';
-import languageContext from './contexts/languageContext'
+import Input from './Input';
+import Congrats from './Congrats';
+import GuessedWords from './GuessedWords';
+import NewWordButton from './NewWordButton';
+import SecretWordReveal from './SecretWordReveal';
+import GiveUpButton from './GiveUpButton';
+import EnterSecretWordButton from './EnterSecretWordButton';
+import SecretWordEntry from './SecretWordEntry';
 
 /**
  * Reducer to update state, called automatically by dispatch
@@ -14,7 +23,7 @@ import languageContext from './contexts/languageContext'
  * @return {object} - new state
  */
 function reducer(state, action) {
-  switch (action.type) {
+  switch(action.type) {
     case "setSecretWord":
       return { ...state, secretWord: action.payload };
     case "setLanguage":
@@ -34,23 +43,41 @@ function reducer(state, action) {
     default:
       throw new Error(`Invalid action type: ${action.type}`);
   }
+
 }
 
 function App() {
-  const [state, dispatch] = React.useReducer(reducer, { secretWord: null, language: 'en' });
-  const setSecretWord = (secretWord) => dispatch({
-    type: "setSecretWord",
-    payload: secretWord
-  });
+  
+  const [state, dispatch] = React.useReducer(
+    reducer,
+    { secretWord: null, language: 'en' }
+  )
 
+  const setSecretWord = (secretWord) =>
+    dispatch({ type: "setSecretWord", payload: secretWord });
   const setLanguage = (language) =>
     dispatch({ type: "setLanguage", payload: language });
+  // Challenge #3: Give Up
+  const setGivenUp = (givenUp) => 
+    dispatch({ type: "setGivenUp", payload: givenUp })
+  // END: Challenge #3: Give Up
 
-  React.useEffect(() => {
-    hookActions.getSecretWord(setSecretWord)
-  }, []);
+  // Challenge #4: Enter Secret Word
+  const setEnterSecretWord = (enterSecretWord) => 
+    dispatch({ type: "setEnterSecretWord", payload: enterSecretWord })
+  // END: Challenge #4: Enter Secret Word
 
-  if (!state.secretWord) {
+  // Challenge #5: Server Error
+  const setServerError = (isServerError) => 
+    dispatch({ type: "setEnterSecretWord", payload: isServerError })
+  // END: Challenge #5: Server Error
+
+  React.useEffect(
+    () => { hookActions.getSecretWord(setSecretWord, setServerError) },
+    []
+  )
+
+  if(!state.secretWord) {
     return (
       <div className="container" data-test="spinner">
         <div className="spinner-border" role="status">
@@ -61,14 +88,42 @@ function App() {
     );
   }
 
-  return <div className="container" data-test='component-app'>
-    <h1>Jotto</h1>
-    <languageContext.Provider value={state.language}>
-      <LanguagePicker setLanguage={setLanguage} />
-      <Input secretWord={state.secretWord} />
-    </languageContext.Provider>
+  return (
+    <div className="container" data-test="component-app">
+      <h1>Jotto</h1>
+      <languageContext.Provider value={state.language}>
+        <LanguagePicker setLanguage={setLanguage} />
+        <guessedWordsContext.GuessedWordsProvider>
+          {/* Challenge #5: Server Error */}
 
-  </div>
+            {/* Challenge #4: Enter Secret Word */}
+            { state.enterSecretWord 
+              ? <SecretWordEntry setEnterSecretWord={setEnterSecretWord} setSecretWord={setSecretWord} />
+              : (<div>
+                  <successContext.SuccessProvider>
+                    {/* Challenge #3: Give Up */}
+                    { state.givenUp 
+                      ? <SecretWordReveal secretWord={state.secretWord}/>
+                      : <Congrats /> }
+                    {/* END: Challenge #3: Give Up */}
+
+                    {/* Challenge #2 and #3 */}
+                    <NewWordButton setSecretWord={setSecretWord} setGivenUp={setGivenUp} />
+                    { !state.givenUp ? <GiveUpButton setGivenUp={setGivenUp}/> : "" }
+                    <Input secretWord={state.secretWord} />
+                    {/* END: Challenge #2 and #3 */}
+
+                  </successContext.SuccessProvider>
+                  <GuessedWords />
+                  <EnterSecretWordButton setEnterSecretWord={setEnterSecretWord} />
+                </div>)
+                }
+              {/* END: Challenge #4: Enter Secret Word */}
+            {/* END: Challenge #5: Server Error */}
+          </guessedWordsContext.GuessedWordsProvider>
+      </languageContext.Provider>
+    </div>
+  );
 }
 
 export default App;
