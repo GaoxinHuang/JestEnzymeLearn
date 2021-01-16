@@ -77,3 +77,11 @@ const setup = ({ success, language }) => {
 }
 2.  注: 因为传递了 setSuccess, 所以mock setSuccess, 
         为了查看有被调用可以, 自己mock, 记得要 mockSetSuccess
+
+L151 & L52  GuessedWords 其实和 congrats context 差不多
+
+L153 Review of Context with Embedded State
+1.  Context 包括的内容如下
+(1) createContext
+(2) useContext
+(3) useState (然后还有可以外界调用的setState的function)

@@ -1,0 +1,6 @@
+L154 Test and code consuming success context
+1.  wrapper.isEmptyRender 来查看是否 render, (当render null 为 true)
+test('input component does not show when success is true', () => {
+  const wrapper = setup({ secretWord: "party", success: true });
+  expect(wrapper.isEmptyRender()).toBe(true);
+});
