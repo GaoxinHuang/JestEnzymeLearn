@@ -1,0 +1,66 @@
+L155 - 156 Set up Success Test (在 integration_tests/guesses.test.js)
+1.  测试代码
+function setup(guessedWordsStrings=[], secretWord="party") {
+  const wrapper = mount(
+    <guessedWordsContext.GuessedWordsProvider>
+      <successContext.SuccessProvider>
+        <Input secretWord={secretWord} />
+        <GuessedWords />
+      </successContext.SuccessProvider>
+    </guessedWordsContext.GuessedWordsProvider>
+  );
+
+  const inputBox = findByTestAttr(wrapper, 'input-box');
+  const submitButton = findByTestAttr(wrapper, 'submit-button');
+
+    //prepopulate guessedWords context by simulating word guessedWords
+  guessedWordsStrings.map(word => {
+    const mockEvent = { target: { value: word } };
+    inputBox.simulate("change", mockEvent);
+    submitButton.simulate("click");
+  })
+  return [wrapper, inputBox, submitButton];
+}
+describe('test word guesses', () => {
+    let wrapper;
+    let inputBox;
+    let submitButton;
+    beforeEach(() => {
+      [wrapper, inputBox, submitButton] = setup(["agile"], "party");
+    });
+    ...
+    describe('correct guess', () => {
+      beforeEach(() => {
+          // 如果需要修改 event 的value 可以用这个
+        const mockEvent = { target: { value: "party" } };
+        inputBox.simulate("change", mockEvent);
+        submitButton.simulate("click");
+      });
+      ....
+     }
+    describe('incorrect guess', () => {
+      beforeEach(() => {
+          // 如果需要修改 event 的value 可以用这个
+        const mockEvent = { target: { value: "train" } };
+        inputBox.simulate("change", mockEvent);
+        submitButton.simulate("click");
+      });
+      ....
+    }
+}
+
+注: (1)  prepopulate guessedWords context by simulating word guessedWords
+        是每个测试都需要按 change 和 click, 当然passed
+    
+    (2) return inputBox 和 submitButton 是方便 simulate
+    (3) !!! mockEvent 来 mock 触发 change 的value 等等 
+    const mockEvent = { target: { value: word } };
+    inputBox.simulate("change", mockEvent);
+    submitButton.simulate("click");
+
+L156 - 159
+几个重点方法:
+
+(1) Enyzme - Xxx.exists(): 判断是否存在这个 component  
+    const inputBox = findByTestAttr(wrapper, 'input-box');
+    expect(inputBox.exists()).toBe(true);

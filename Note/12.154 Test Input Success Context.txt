@@ -4,3 +4,20 @@ test('input component does not show when success is true', () => {
   const wrapper = setup({ secretWord: "party", success: true });
   expect(wrapper.isEmptyRender()).toBe(true);
 });
+
+2.  setup (目前看没有什么用处)
+const setup = ({ language, secretWord, success }) => {
+  language = language || "en";
+  secretWord = secretWord || "party";
+  success = success || false;
+
+  return mount(
+    <languageContext.Provider value={language} >
+      <successContext.SuccessProvider value={[success, jest.fn()]}>
+        <guessedWordsContext.GuessedWordsProvider>
+          <Input secretWord={secretWord} />
+        </guessedWordsContext.GuessedWordsProvider>
+      </successContext.SuccessProvider>
+    </languageContext.Provider>
+  );
+}
