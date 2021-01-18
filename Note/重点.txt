@@ -1,8 +1,5 @@
 一.	ajv 是什么, 什么作用 (L2.15-16)
-1.	作用:	避免 因为peer dependency而出现 npm bug
-warning信息如下 --- UNMET PEER DEPENDENCY webpack@3.0.0
-
-2.	概念:	
+1.	概念:	
 (1)	ajv 是 "Another JSON Validator" and it is used for validating JSON.
 	它已经属于 create-react-app 的一部分
 	
